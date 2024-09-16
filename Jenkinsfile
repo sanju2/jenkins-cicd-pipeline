@@ -31,7 +31,7 @@ pipeline {
             steps {
                 script {
                         withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                            sh "docker build -t lasanthasanjeewa/jenkins:v1 ."
+                            sh "docker build -t lasanthasanjeewa/testapp:v1 ."
                    }
                 }
             }
@@ -39,7 +39,7 @@ pipeline {
     
         stage('Trivy Image Scan') {
             steps {
-                sh "trivy image --format json -o trivy-image-report.json lasanthasanjeewa/jenkins:v1"
+                sh "trivy image --format json -o trivy-image-report.json lasanthasanjeewa/testapp:v1"
             }
         }
     
@@ -47,7 +47,7 @@ pipeline {
             steps {
                 script {
                         withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                            sh "docker push lasanthasanjeewa/jenkins:v1 "
+                            sh "docker push lasanthasanjeewa/testapp:v1 "
                    }
                 }
                 
@@ -56,7 +56,7 @@ pipeline {
     
         stage('Deploy To Container') {
             steps {
-                sh "docker run -d -p 8081:80 lasanthasanjeewa/jenkins:v1"
+                sh "docker run -d -p 8081:80 lasanthasanjeewa/testapp:v1"
             }
         }
     }
